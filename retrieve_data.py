@@ -24,8 +24,8 @@ cursor = conn.cursor()
 
 # result function
 def show_result(result):
-for x in result: 
-	print(x)
+	for x in result: 
+		print(x)
 
 # get data
 def get_data():
