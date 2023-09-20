@@ -103,12 +103,12 @@ def get_data():
 	conn.close()
 
 	# create the html
-	results_html = '''	<tr>
-							<th>Rank</th>
-							<th>University</th>
-							<th>Year</th>
-							<th>Country</th>
-						</tr>
+	results_html = '''<tr>
+				<th>Rank</th>
+				<th>University</th>
+				<th>Year</th>
+				<th>Country</th>
+			</tr>
 	'''
 	for i in result:
 		rank = str(i[2])
@@ -116,12 +116,12 @@ def get_data():
 		year = str(i[1])
 		country = i[3]
 		results_html = results_html + \
-								f'''<tr>
-									<td>{rank}</td>
-									<td>{university}</td>
-									<td>{year}</td>
-									<td>{country}</td>
-								</tr>'''
+			f'''<tr>
+				<td>{rank}</td>
+				<td>{university}</td>
+				<td>{year}</td>
+				<td>{country}</td>
+			</tr>'''
 
 	# return the result
 	return results_html
