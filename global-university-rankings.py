@@ -130,5 +130,5 @@ def get_data():
 #data_insertion()
 data_to_return = get_data()
 
-	# return the result
-	return jsonify(data_to_return)
+# return the result
+return jsonify(data_to_return)
