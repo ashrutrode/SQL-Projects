@@ -1,2 +1,2 @@
-# TSLASQL
-Python, MySQL, and SQL code for analyzing TSLA stock.
+# SQL Projects
+Python, MySQL, and SQL code for my SQL projects.
