@@ -108,12 +108,12 @@ def get_data():
 	conn.close()
 
 	# create the html
-	results_html = '''	<tr>
-							<th>Date (MM-DD-YYYY)</th>
-							<th>Rank</th>
-							<th>Song</th>
-							<th>Artist</th>
-						</tr>
+	results_html = '''<tr>
+				<th>Date (MM-DD-YYYY)</th>
+				<th>Rank</th>
+				<th>Song</th>
+				<th>Artist</th>
+			</tr>
 	'''
 	for i in result:
 
@@ -131,12 +131,12 @@ def get_data():
 
 		# create html
 		results_html = results_html + \
-								f'''<tr>
-									<td>{date}</td>
-									<td>{rank}</td>
-									<td>{song}</td>
-									<td>{artist}</td>
-								</tr>'''
+						f'''<tr>
+							<td>{date}</td>
+							<td>{rank}</td>
+							<td>{song}</td>
+							<td>{artist}</td>
+						</tr>'''
 
 	# return the result
 	return results_html
