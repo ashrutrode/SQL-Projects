@@ -91,6 +91,40 @@ def data_insertion():
 	conn.close()
 	exit()
 
+# create dropdowns
+def create_dropdowns():
+
+	# select all artists and 
+	# the number of times they appear
+	sql = f'''SELECT artist, COUNT(artist)
+		  FROM billboard_top_100
+		  GROUP BY artist
+		  ORDER BY COUNT(artist) DESC'''
+	cursor.execute(sql)
+	result = cursor.fetchall()
+
+	# convert into html dropdown
+	dropdown_html = f'<select name="artist" id="artist" class="dropdowns_world_universities"><option value="all">All Artists</option>'
+	for i in result:
+
+		# get artist name and number of hits
+		artist_name = str(i[0])
+		num_hits = i[1]
+
+		# determine whether it was more than one hit
+		songs_plural = ""
+		if num_hits > 1:
+			songs_plural = "s"
+		num_hits = str(num_hits)
+
+		# create html
+		dropdown_html = dropdown_html + f'<option value="{artist_name}">' + artist_name + " - " + num_hits + " Hit Song" + songs_plural + "</option>"
+	dropdown_html = dropdown_html + '</select>'
+
+	# return the result
+	print(dropdown_html)
+	exit()
+
 # get data
 def get_data():
 
@@ -143,6 +177,7 @@ def get_data():
 
 # call function
 #data_insertion()
+#create_dropdowns()
 data_to_return = get_data()
 
 # return the result
