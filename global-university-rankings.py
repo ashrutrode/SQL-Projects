@@ -70,6 +70,40 @@ def data_insertion():
 	conn.close()
 	exit()
 
+# create dropdowns
+def create_dropdowns():
+	
+	# vars for sql queries and dropdowns
+	col_names = ['university', 'year', 'country']
+	cols_names_plural = ['Universities', 'Years', 'Countries']
+	dropdowns = []
+	for index, col in enumerate(col_names):
+		
+		# do the sql queries for each col
+		sql = f'''SELECT DISTINCT {col}
+				  FROM world_university_ranking
+				  ORDER BY {col}'''
+		cursor.execute(sql)
+		result = cursor.fetchall()
+
+		# convert into html dropdown
+		dropdown_html = f'<select name="{col}" id="{col}" class="dropdowns_world_universities"><option value="all">All {cols_names_plural[index]}</option>'
+		for i in result:
+			dropdown_html = dropdown_html + f'<option value="{str(i[0])}">' + str(i[0]) + "</option>"
+		dropdown_html = dropdown_html + '</select>'
+
+		# append dropdown
+		dropdowns.append(dropdown_html)
+	
+	# give dropdowns specific var names
+	univesity_dropdown = dropdowns[0]
+	year_dropdown = dropdowns[1]
+	country_dropdown = dropdowns[2]
+
+	# display the result
+	print(university_dropdown + year_dropdown + country_dropdown)
+	exit()
+
 # get data
 def get_data():
 
@@ -128,6 +162,7 @@ def get_data():
 
 # call function
 #data_insertion()
+#create_dropdowns()
 data_to_return = get_data()
 
 # return the result
