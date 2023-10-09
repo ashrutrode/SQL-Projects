@@ -188,3 +188,102 @@ use schema snowflake_sample_data.tpch_sf1;
     SELECT N_NAME FROM nation WHERE N_NAME = 'UNITED STATES'
     UNION ALL
     (SELECT N_NAME FROM nation WHERE N_NAME != 'UNITED STATES' ORDER BY N_NAME);
+
+    --26. Breakdown of each country by year using CTE
+    --show country name, year, total revenue, avg price, min order, max order, std dev
+    with orders_by_country as (
+        SELECT *
+        FROM orders
+        JOIN customer ON O_CUSTKEY=C_CUSTKEY
+        JOIN nation ON C_NATIONKEY=N_NATIONKEY
+    )
+    SELECT 
+        N_NAME as country_name, 
+        YEAR(O_ORDERDATE) as year, 
+        SUM(O_TOTALPRICE) as total_revenue,
+        ROUND(AVG(O_TOTALPRICE), 2) AS avg_order,
+        MIN(O_TOTALPRICE) AS min_order,
+        MAX(O_TOTALPRICE) AS max_order,
+        ROUND(STDDEV(O_TOTALPRICE), 2) as std_dev
+    FROM orders_by_country
+    GROUP BY country_name, year
+    ORDER BY country_name, year;
+
+    --27. Breakdown by supplier
+    with supplier_breakdown as (
+        SELECT * 
+        FROM supplier 
+        JOIN partsupp ON s_suppkey=ps_suppkey
+    )
+    SELECT 
+        s_suppkey, 
+        AVG(s_acctbal) as account_balance, 
+        COUNT(*) as num_parts,
+        MIN(ps_availqty) as parts_min_avail,
+        MAX(ps_availqty) as parts_max_avail,
+        ROUND(AVG(ps_availqty), 2) as parts_avg_avail,
+        MIN(ps_supplycost) as parts_min_cost,
+        MAX(ps_supplycost) as parts_max_cost,
+        ROUND(AVG(ps_supplycost), 2) as parts_avg_cost
+    FROM supplier_breakdown
+    GROUP BY s_suppkey
+    ORDER BY s_suppkey
+
+    --28. Lineitems by day of the week
+    with lineitems_by_day_name as (
+        SELECT 
+            CASE
+                WHEN DAYNAME(L_SHIPDATE)='Sun' THEN 0
+                WHEN DAYNAME(L_SHIPDATE)='Mon' THEN 1
+                WHEN DAYNAME(L_SHIPDATE)='Tue' THEN 2
+                WHEN DAYNAME(L_SHIPDATE)='Wed' THEN 3
+                WHEN DAYNAME(L_SHIPDATE)='Thu' THEN 4
+                WHEN DAYNAME(L_SHIPDATE)='Fri' THEN 5
+                WHEN DAYNAME(L_SHIPDATE)='Sat' THEN 6
+            END as day_num,
+            DAYNAME(L_SHIPDATE) as day_name,
+            *
+        FROM lineitem
+    )
+    SELECT 
+        day_num, 
+        day_name, 
+        COUNT(*) as li_num,
+        MIN(L_QUANTITY) as li_min_quant,
+        MAX(L_QUANTITY) as li_max_quant,
+        ROUND(AVG(L_QUANTITY), 2) as li_avg_quant,
+        MIN(L_EXTENDEDPRICE) as li_min_extprice,
+        MAX(L_EXTENDEDPRICE) as li_max_extprice,
+        ROUND(AVG(L_EXTENDEDPRICE), 2) as li_avg_extprice
+    FROM lineitems_by_day_name
+    GROUP BY day_num, day_name
+    ORDER BY day_num;
+
+    --29. Region, number of countries, number of customers
+    with region_info as (
+        SELECT * 
+        FROM region
+        JOIN nation ON R_REGIONKEY=N_REGIONKEY
+        JOIN customer ON C_NATIONKEY=N_NATIONKEY
+        ORDER BY R_REGIONKEY
+    )
+    SELECT 
+        R_NAME,
+        COUNT(DISTINCT N_NAME) as num_countries, 
+        COUNT(C_NAME) as num_customers 
+    FROM region_info
+    GROUP BY R_NAME;
+
+    --30. Percent of parts by type, shown as a percent rounded to two decimal places
+    with total_part_by_type as (
+        SELECT 
+            P_TYPE, 
+            COUNT(*) as count_parts
+        FROM part
+        GROUP BY P_TYPE
+    )
+    SELECT 
+        P_TYPE,
+        count_parts,
+        ROUND(100*count_parts/(SELECT COUNT(*) FROM part), 2) || '%'
+    FROM total_part_by_type;
