@@ -67,11 +67,11 @@ def data_insertion():
 	for i in range(1, len(tsla_data)):
 
 		# get all information
-		date = tsla_data[i][0];
-		open_ = tsla_data[i][1];
-		high = tsla_data[i][2];
-		low = tsla_data[i][3];
-		close = tsla_data[i][4];
+		date = tsla_data[i][0]
+		open_ = tsla_data[i][1]
+		high = tsla_data[i][2]
+		low = tsla_data[i][3]
+		close = tsla_data[i][4]
 
 		# peform the query
 		sql = f"INSERT INTO tsla_stock (date, open, high, low, close) VALUES ({date}, {open_}, {high}, {low}, {close})";
