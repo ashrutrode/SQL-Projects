@@ -1,4 +1,4 @@
-  # get user_response
+	# get user_response
 	user_input = request.get_json()
 
 	# get the logic sign, number of mcos, and centene present
@@ -81,7 +81,7 @@
 
 		# if at least one doesn't equal all, we need to build the WHERE clause
 		sql_tuple = ()
-		if mco_contingent != "all":#not (university_input == "all" and year_input == "all" and country_input == "all"):
+		if mco_contingent != "all":
 			if mco_contingent == "greater than or equal to":
 				mco_cont_sign = ">="
 			elif mco_contingent == "equal to":
@@ -90,7 +90,7 @@
 				mco_cont_sign = "<="
 			sql = sql + f'WHERE num_medicaid_mcos {mco_cont_sign} %s '
 			sql_tuple = (mco_cont_num, )
-		if centene_present != "all":#not (university_input == "all" and year_input == "all" and country_input == "all"):
+		if centene_present != "all":
 			if centene_present == "yes":
 				centene_present_sign = "TRUE"
 			elif centene_present == "no":
@@ -111,22 +111,22 @@
 		conn.close()
 
 		# create the html
-		results_html = '''	<tr>
-								<th>Location</th>
-								<th># MCOs</th>
-								<th>Centene Present</th>
-							</tr>
+		results_html = '''<tr>
+					<th>Location</th>
+					<th># MCOs</th>
+					<th>Centene Present</th>
+				</tr>
 		'''
 		for i in result:
 			location = i[0]
 			num_mcos = str(i[1])
 			centene_pres = i[2]
 			results_html = results_html + \
-									f'''<tr>
-										<td>{location}</td>
-										<td>{num_mcos}</td>
-										<td>{centene_pres}</td>
-									</tr>'''
+			f'''<tr>
+				<td>{location}</td>
+				<td>{num_mcos}</td>
+				<td>{centene_pres}</td>
+			</tr>'''
 
 		# return the result
 		return results_html
