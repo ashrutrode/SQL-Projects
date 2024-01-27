@@ -79,7 +79,7 @@
 		# build sql query based on user inputs
 		sql = 'SELECT * FROM medicaid_mcos '
 
-		# if at least one doesn't equal all, we need to build the WHERE clause
+		# build the WHERE clause based on user inputs
 		sql_tuple = ()
 		if mco_contingent != "all":
 			if mco_contingent == "greater than or equal to":
@@ -101,7 +101,6 @@
 				sql = sql + f'WHERE centene_available = "{centene_present_sign}"'
 		
 		# last part of sql
-		#sql = sql + 'ORDER BY worldRank, year
 		cursor.execute(sql, sql_tuple)
 		result = cursor.fetchall()
 		#print(sql, "\n", sql_tuple, "\n", result)
