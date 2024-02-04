@@ -240,7 +240,15 @@ ORDER BY ROUND(SUM(total_sales)/1000000, 0) DESC, manufacturer;
 
 
 --18. User's Third Transaction [Uber SQL Interview Question]
-with users_with_3_or_more_trans as (
+select user_id, spend, transaction_date FROM (
+  select 
+    *,
+    RANK() OVER(PARTITION BY user_id ORDER BY transaction_date) Rank
+  from transactions
+  order by user_id, transaction_date
+) t
+WHERE t.rank = 3;
+/*with users_with_3_or_more_trans as (
   SELECT user_id
   FROM transactions 
   GROUP BY user_id
@@ -259,4 +267,4 @@ table_with_row_num as (
 
 select user_id, spend, transaction_date 
 from table_with_row_num
-where row_number%3 = 0;
+where row_number%3 = 0;*/
