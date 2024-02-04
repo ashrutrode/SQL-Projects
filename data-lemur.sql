@@ -1,4 +1,4 @@
---Data Science Skills [LinkedIn SQL Interview Question]
+--2. Data Science Skills [LinkedIn SQL Interview Question]
 SELECT candidate_id, count(*) as count_skills
 FROM candidates
 WHERE skill in ('Python', 'Tableau', 'PostgreSQL')
@@ -9,7 +9,7 @@ HAVING count(*) >= 3;
 
 
 
---Page With No Likes [Facebook SQL Interview Question]
+--3. Page With No Likes [Facebook SQL Interview Question]
 with pages_with_likes as (
   SELECT page_id, count(*)
   FROM page_likes
@@ -26,7 +26,7 @@ ORDER BY pages.page_id;
 
 
 
---Unfinished Parts [Tesla SQL Interview Question]
+--4. Unfinished Parts [Tesla SQL Interview Question]
 SELECT part, finish_date 
 FROM parts_assembly
 where finish_date is null;
@@ -35,7 +35,7 @@ where finish_date is null;
 
 
 
---Laptop vs. Mobile Viewership [New York Times SQL Interview Question]
+--5. Laptop vs. Mobile Viewership [New York Times SQL Interview Question]
 select
   (
     select count(*) 
@@ -52,7 +52,7 @@ select
 
 
 
---Average Post Hiatus (Part 1) [Facebook SQL Interview Question]
+--6. Average Post Hiatus (Part 1) [Facebook SQL Interview Question]
 with cte as (
   SELECT user_id, count(*) AS count_posts
   FROM posts
@@ -72,7 +72,7 @@ group by posts.user_id;
 
 
 
---Teams Power Users [Microsoft SQL Interview Question]
+--7. Teams Power Users [Microsoft SQL Interview Question]
 SELECT sender_id, count(*) as message_count 
 FROM messages
 GROUP BY sender_id
@@ -83,7 +83,7 @@ LIMIT 2;
 
 
 
---Duplicate Job Listings [Linkedin SQL Interview Question]
+--8. Duplicate Job Listings [Linkedin SQL Interview Question]
 with dupl_cte as 
 (
   SELECT company_id, count(*)
@@ -99,7 +99,7 @@ FROM dupl_cte;
 
 
 
---Cities With Completed Trades [Robinhood SQL Interview Question]
+--9. Cities With Completed Trades [Robinhood SQL Interview Question]
 SELECT city, count(*) 
 FROM trades
 JOIN users ON trades.user_id = users.user_id
@@ -112,4 +112,39 @@ LIMIT 3;
 
 
 
+--10. Average Review Ratings [Amazon SQL Interview Question]
+SELECT 
+  EXTRACT(MONTH FROM submit_date) as mth, 
+  product_id as product, 
+  ROUND(AVG(stars), 2) as avg_stars
+FROM reviews
+GROUP BY product_id, mth
+ORDER BY mth, product;
 
+
+
+
+
+--11. App Click-through Rate (CTR) [Facebook SQL Interview Question]
+SELECT 
+  app_id,
+  ROUND(
+    100.0 * 
+    SUM(CASE WHEN event_type = 'click' THEN 1 END) / 
+    SUM(CASE WHEN event_type = 'impression' THEN 1 END), 
+  2) as ctr
+FROM events
+GROUP BY app_id;
+
+
+
+
+
+--12. Second Day Confirmation [TikTok SQL Interview Question]
+SELECT user_id
+FROM emails
+JOIN texts ON emails.email_id = texts.email_id
+WHERE 
+  signup_action = 'Confirmed' AND
+  signup_date + interval '1' day = action_date
+ORDER BY emails.email_id;
