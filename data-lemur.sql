@@ -289,3 +289,21 @@ FROM (
   GROUP BY age_bucket
   ORDER BY age_bucket
 ) t;
+
+
+
+
+
+--20. Tweets' Rolling Averages [Twitter SQL Interview Question]
+SELECT 
+  user_id,
+  tweet_date,
+  ROUND((tweet_count + prior_day + day_before)/3.0, 2)
+FROM (
+  SELECT 
+    *,
+    Lag(tweet_count, 1, 0) OVER(PARTITION BY user_id ORDER BY user_id, tweet_date) AS prior_day,
+    Lag(tweet_count, 2, 0) OVER(PARTITION BY user_id ORDER BY user_id, tweet_date) AS day_before
+  FROM tweets
+  ORDER BY user_id, tweet_date
+) t;
