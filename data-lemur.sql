@@ -330,3 +330,32 @@ from (
   ORDER BY category
 ) t
 where t.rank in (1, 2);
+
+
+
+
+
+--22. Top 5 Artists [Spotify SQL Interview Question]
+with highest_num_songs as (
+  SELECT 
+    artist_name,
+    count(*) as num_songs
+  FROM artists 
+  JOIN songs ON artists.artist_id = songs.artist_id
+  JOIN global_song_rank ON global_song_rank.song_id = songs.song_id
+  WHERE rank <= 10
+  GROUP BY artist_name
+  ORDER BY count(*) DESC
+),
+distinct_num_songs as (
+  select DISTINCT(num_songs) 
+  from highest_num_songs
+  ORDER BY num_songs DESC
+  LIMIT 5
+)
+
+select 
+  artist_name,
+  DENSE_RANK() OVER(ORDER BY num_songs DESC) as artist_rank
+from highest_num_songs
+where num_songs in (select * from distinct_num_songs)
