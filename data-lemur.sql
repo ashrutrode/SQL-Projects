@@ -268,3 +268,24 @@ table_with_row_num as (
 select user_id, spend, transaction_date 
 from table_with_row_num
 where row_number%3 = 0;*/
+
+
+
+
+
+--19. Sending vs. Opening Snaps [Snapchat SQL Interview Question]
+SELECT 
+  age_bucket, 
+  ROUND(100*time_sending/(time_sending+time_opening), 2) as send_perc,
+  ROUND(100*time_opening/(time_sending+time_opening), 2) as open_perc
+FROM (
+  SELECT 
+    age_bucket, 
+    SUM(CASE WHEN activity_type = 'open' THEN time_spent END) as time_opening,
+    SUM(CASE WHEN activity_type = 'send' THEN time_spent END) as time_sending
+  FROM activities
+  JOIN age_breakdown ON activities.user_id = age_breakdown.user_id
+  WHERE activity_type in ('open', 'send')
+  GROUP BY age_bucket
+  ORDER BY age_bucket
+) t;
