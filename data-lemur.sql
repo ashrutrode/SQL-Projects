@@ -1,3 +1,22 @@
+--1. Histogram of Tweets [Twitter SQL Interview Question]
+with tweets_per_user as (
+  SELECT count(*) as num_tweets
+  FROM tweets
+  WHERE EXTRACT(YEAR from tweet_date) = 2022
+  GROUP BY user_id
+  ORDER BY count(*)
+)
+
+select 
+  num_tweets as tweet_bucket,
+  count(*) as users_num
+from tweets_per_user
+group by tweet_bucket;
+
+
+
+
+
 --2. Data Science Skills [LinkedIn SQL Interview Question]
 SELECT candidate_id, count(*) as count_skills
 FROM candidates
@@ -148,3 +167,15 @@ WHERE
   signup_action = 'Confirmed' AND
   signup_date + interval '1' day = action_date
 ORDER BY emails.email_id;
+
+
+
+
+
+--13.Cards Issued Difference [JPMorgan Chase SQL Interview Question]
+SELECT 
+  card_name, 
+  MAX(issued_amount)-MIN(issued_amount) as difference
+FROM monthly_cards_issued
+GROUP BY card_name
+ORDER BY difference DESC;
