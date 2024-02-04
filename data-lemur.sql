@@ -179,3 +179,20 @@ SELECT
 FROM monthly_cards_issued
 GROUP BY card_name
 ORDER BY difference DESC;
+
+
+
+
+
+--14. Compressed Mean [Alibaba SQL Interview Question]
+with total_orders_table as (
+  SELECT SUM(order_occurrences) as total_orders
+  FROM items_per_order
+),
+total_items_table as (
+  select SUM(order_occurrences * item_count) as total_items 
+  from items_per_order
+)
+
+select ROUND(CAST ((total_items/total_orders) as numeric), 1) as mean 
+from total_orders_table, total_items_table;
