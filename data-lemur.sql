@@ -234,3 +234,29 @@ SELECT
 FROM pharmacy_sales
 GROUP BY manufacturer
 ORDER BY ROUND(SUM(total_sales)/1000000, 0) DESC, manufacturer;
+
+
+
+
+
+--18. User's Third Transaction [Uber SQL Interview Question]
+with users_with_3_or_more_trans as (
+  SELECT user_id
+  FROM transactions 
+  GROUP BY user_id
+  HAVING count(*) >= 3
+  ORDER BY user_id
+),
+table_with_row_num as (
+  SELECT
+    *,
+    ROW_NUMBER() OVER(ORDER BY user_id, transaction_date) AS row_number 
+  FROM transactions
+  WHERE 
+    user_id in (SELECT * FROM users_with_3_or_more_trans)
+  ORDER BY user_id, transaction_date
+)
+
+select user_id, spend, transaction_date 
+from table_with_row_num
+where row_number%3 = 0;
