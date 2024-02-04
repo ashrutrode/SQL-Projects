@@ -307,3 +307,26 @@ FROM (
   FROM tweets
   ORDER BY user_id, tweet_date
 ) t;
+
+
+
+
+
+--21. Highest-Grossing Items [Amazon SQL Interview Question]
+select 
+  category,
+  product,
+  total_spend
+from (
+  select 
+    category, 
+    product, 
+    SUM(spend) as total_spend,
+    RANK() OVER(PARTITION BY category ORDER BY SUM(spend) DESC) as rank
+  from product_spend
+  WHERE 
+    EXTRACT(YEAR FROM transaction_date) = 2022
+  GROUP BY category, product
+  ORDER BY category
+) t
+where t.rank in (1, 2);
