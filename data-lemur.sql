@@ -196,3 +196,15 @@ total_items_table as (
 
 select ROUND(CAST ((total_items/total_orders) as numeric), 1) as mean 
 from total_orders_table, total_items_table;
+
+
+
+
+
+--15. Pharmacy Analytics (Part 1) [CVS Health SQL Interview Question]
+SELECT 
+  drug,
+  total_sales - cogs as total_profit
+FROM pharmacy_sales
+ORDER BY total_profit DESC
+LIMIT 3;
