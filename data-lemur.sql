@@ -208,3 +208,29 @@ SELECT
 FROM pharmacy_sales
 ORDER BY total_profit DESC
 LIMIT 3;
+
+
+
+
+
+--16. Pharmacy Analytics (Part 2) [CVS Health SQL Interview Question]
+SELECT 
+  manufacturer,
+  count(*) as drug_count,
+  -SUM(total_sales-cogs) as total_loss
+FROM pharmacy_sales
+WHERE total_sales-cogs < 0
+GROUP BY manufacturer
+ORDER BY total_loss DESC;
+
+
+
+
+
+--17. Pharmacy Analytics (Part 3) [CVS Health SQL Interview Question]
+SELECT 
+  manufacturer, 
+  '$' || ROUND(SUM(total_sales)/1000000, 0) || ' million' as sale
+FROM pharmacy_sales
+GROUP BY manufacturer
+ORDER BY ROUND(SUM(total_sales)/1000000, 0) DESC, manufacturer;
