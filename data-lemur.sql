@@ -389,3 +389,23 @@ from final_totals;
 
 
 
+
+--24. Supercloud Customer [Microsoft SQL Interview Question]
+with distinct_categories as (
+  SELECT DISTINCT(product_category) FROM products
+),
+customers_and_category_grouped as (
+  select 
+    customer_id,
+    product_category
+  from customer_contracts
+  join products on 
+    customer_contracts.product_id = products.product_id
+  group by customer_id, product_category
+  order by customer_id
+)
+
+select customer_id
+from customers_and_category_grouped
+group by customer_id
+having count(*) >= (select count(*) from distinct_categories);
