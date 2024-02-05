@@ -409,3 +409,35 @@ select customer_id
 from customers_and_category_grouped
 group by customer_id
 having count(*) >= (select count(*) from distinct_categories);
+
+
+
+
+
+--25. Odd and Even Measurements [Google SQL Interview Question]
+with last_digit_table as (
+  select 
+    measurement_time,
+    cast(measurement_value as float),
+    RIGHT(cast(cast(measurement_value as float) as varchar), 1) as last_num
+  from measurements
+)
+SELECT 
+  date(measurement_time),
+  ROUND(
+    CAST(
+          SUM(CASE WHEN CAST(last_num as INT)%2 = 1 THEN measurement_value END) 
+    as numeric), 
+  2) as odd_sum,
+  ROUND(
+    CAST(
+          SUM(CASE WHEN CAST(last_num as INT)%2 = 0 THEN measurement_value END) 
+    as numeric),
+  2) as even_sum
+FROM last_digit_table
+GROUP BY date(measurement_time)
+ORDER BY date(measurement_time);
+
+
+
+
