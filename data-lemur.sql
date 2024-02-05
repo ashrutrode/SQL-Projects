@@ -359,3 +359,33 @@ select
   DENSE_RANK() OVER(ORDER BY num_songs DESC) as artist_rank
 from highest_num_songs
 where num_songs in (select * from distinct_num_songs)
+
+
+
+
+
+--23. Signup Activation Rate [TikTok SQL Interview Question]
+with signup_table as (
+  SELECT 
+    signup_action,
+    count(*)
+  FROM emails
+  JOIN texts ON texts.email_id = emails.email_id
+  GROUP BY signup_action
+),
+final_totals as (
+  select 
+    (select count from signup_table where signup_action = 'Confirmed') as confirmed_total,
+    (select count from signup_table where signup_action = 'Not Confirmed') as not_confirmed_total
+)
+
+select 
+  ROUND(
+          confirmed_total/
+          ((confirmed_total+not_confirmed_total)*1.0), 
+  2) as confirm_rate
+from final_totals;
+
+
+
+
