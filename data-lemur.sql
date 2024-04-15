@@ -41,6 +41,13 @@ on pages.page_id=pages_with_likes.page_id
 where pages_with_likes.page_id is NULL
 ORDER BY pages.page_id;
 
+--another solution
+SELECT pages.page_id 
+FROM pages
+FULL OUTER JOIN page_likes ON page_likes.page_id = pages.page_id
+WHERE user_id is NULL
+ORDER BY page_id;
+
 
 
 
