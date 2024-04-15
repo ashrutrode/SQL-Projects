@@ -462,3 +462,19 @@ ORDER BY date(measurement_time);
 
 
 
+--26. Histogram of Users and Purchases [Walmart SQL Interview Question]
+with user_final_date as (
+  select user_id, MAX(transaction_date) as final_date 
+  from user_transactions
+  group by user_id
+)
+
+select 
+  user_transactions.transaction_date, 
+  user_final_date.user_id, 
+  count(*) 
+from user_transactions
+join user_final_date on 
+  user_final_date.user_id = user_transactions.user_id and 
+  user_final_date.final_date = user_transactions.transaction_date
+group by user_final_date.user_id, user_transactions.transaction_date;
