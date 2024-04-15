@@ -74,6 +74,11 @@ select
     where device_type in ('tablet', 'phone')
   ) as mobile_views
 
+--another solution
+SELECT 
+  SUM(CASE WHEN device_type = 'laptop' THEN 1 END) as laptop_views,
+  SUM(CASE WHEN device_type in ('tablet', 'phone') THEN 1 END) as mobile_views
+FROM viewership;
 
 
 
