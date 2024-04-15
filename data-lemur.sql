@@ -478,3 +478,19 @@ join user_final_date on
   user_final_date.user_id = user_transactions.user_id and 
   user_final_date.final_date = user_transactions.transaction_date
 group by user_final_date.user_id, user_transactions.transaction_date;
+
+
+
+
+
+--27. Compressed Mode [Alibaba SQL Interview Question]
+with cte as (
+SELECT order_occurrences, count(*) 
+FROM items_per_order
+group by order_occurrences
+order by order_occurrences DESC
+LIMIT 1)
+
+select item_count as mode from items_per_order
+join cte on items_per_order.order_occurrences = cte.order_occurrences
+order by item_count DESC;
