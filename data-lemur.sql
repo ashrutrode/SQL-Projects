@@ -126,6 +126,15 @@ with dupl_cte as
 SELECT count(*) as duplicate_companies
 FROM dupl_cte;
 
+--another solution
+SELECT count(*) 
+FROM (
+  SELECT company_id, title, count(*) 
+  FROM job_listings
+  GROUP BY company_id, title
+  HAVING count(*) >= 2
+) as t
+
 
 
 
