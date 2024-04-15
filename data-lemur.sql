@@ -179,7 +179,7 @@ ORDER BY emails.email_id;
 
 
 
---13.Cards Issued Difference [JPMorgan Chase SQL Interview Question]
+--13. Cards Issued Difference [JPMorgan Chase SQL Interview Question]
 SELECT 
   card_name, 
   MAX(issued_amount)-MIN(issued_amount) as difference
