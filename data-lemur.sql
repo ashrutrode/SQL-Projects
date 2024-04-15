@@ -493,4 +493,4 @@ LIMIT 1)
 
 select item_count as mode from items_per_order
 join cte on items_per_order.order_occurrences = cte.order_occurrences
-order by item_count DESC;
+order by item_count ASC;
