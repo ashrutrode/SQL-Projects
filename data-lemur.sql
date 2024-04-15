@@ -509,3 +509,54 @@ order by card_name, rank
 )
 
 select card_name, issued_amount from cte where rank = 1;
+
+
+
+
+--29. International Call Percentage [Verizon SQL Interview Question]
+with country_codes as (
+  select caller_id, country_id from phone_info
+), 
+part1_cte as (
+  select phone_calls.caller_id, country_id, receiver_id
+  from phone_calls
+  join country_codes on phone_calls.caller_id = country_codes.caller_id
+),
+part2_cte as (
+  select 
+    part1_cte.caller_id, 
+    part1_cte.country_id as caller_country,
+    part1_cte.receiver_id,
+    country_codes.country_id as receiver_country
+  from part1_cte
+  join country_codes on part1_cte.receiver_id = country_codes.caller_id
+),
+part3_cte as (
+  select 
+    *,
+    CASE 
+      WHEN caller_country != receiver_country THEN 'international'
+      WHEN caller_country = receiver_country THEN 'domestic'
+    END as type_call
+  from part2_cte
+),
+part4_cte as (
+  select 
+    SUM(CASE WHEN type_call = 'domestic' THEN 1 END) as dom_calls,
+    SUM(CASE WHEN type_call = 'international' THEN 1 END) as int_calls,
+    COUNT(*) as total_calls
+  from part3_cte
+)
+
+select 
+  round(
+    CAST (
+      100*CAST(int_calls as float)/cast(total_calls as float)
+    as numeric), 
+  1)
+from part4_cte;
+
+
+
+
+
