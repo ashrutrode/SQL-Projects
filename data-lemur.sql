@@ -494,3 +494,18 @@ LIMIT 1)
 select item_count as mode from items_per_order
 join cte on items_per_order.order_occurrences = cte.order_occurrences
 order by item_count ASC;
+
+
+
+
+
+--28. Card Launch Success [JPMorgan Chase SQL Interview Question]
+with cte as (
+select 
+  *, 
+  RANK() OVER(PARTITION BY card_name ORDER BY issue_year ASC, issue_month ASC) Rank
+from monthly_cards_issued
+order by card_name, rank
+)
+
+select card_name, issued_amount from cte where rank = 1;
